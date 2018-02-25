@@ -98,7 +98,29 @@ def move_cmd(speed, turn):
     """
     return struct.pack('<BBHBbb', 3, 0, 0, (speed != 0 or turn != 0), speed, turn)
 
+def animation_cmd(param):
+    # param = enum[stop, spin, tap, slowshake, metronome, oudulation, spinjump, spintoposture, spiral,slalom]
+    return struct.pack('<BBHI', 3, 2, 4, param)
 
+def postures_cmd(param):
+    # param = enum[standing, jumper, kicker]
+    return struct.pack('<BBHI', 3, 0, 1, param)
+
+def jump_cmd(param):
+    # param = enum[long, high]
+    return struct.pack('<BBHI', 3, 2, 3, param)
+
+def turn_cmd(param):
+    # param = angle
+    return struct.pack('<BBHf', 3, 0, 2, param)
+
+def volume_cmd(volume):
+    # param = Master audio volume [0:100]
+    return struct.pack("<BBHB", 3, 12, 0, volume)
+
+def requestAllStates_cmd():
+    return struct.pack("BBH", 0, 4, 0)
+	
 def set_media_streaming_cmd(enable=True):
     """
     Project: jpsumo(3), Class: MediaStreaming (18), Command: VideoEnable (0)

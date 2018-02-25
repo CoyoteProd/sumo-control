@@ -3,7 +3,7 @@ import socket
 import logging
 
 from receiver import SumoReceiver
-from sender import SumoSender, move_cmd
+from sender import SumoSender, move_cmd, animation_cmd, postures_cmd,jump_cmd,turn_cmd,volume_cmd,requestAllStates_cmd
 from video import SumoDisplay
 
 
@@ -71,6 +71,28 @@ class SumoController:
         :return:
         """
         self.sender.send(move_cmd(speed, turn))
+    
+    def animation(self, param):
+        # param = enum[stop, spin, tap, slowshake, metronome, oudulation, spinjump, spintoposture, spiral,slalom]
+        self.sender.send(animation_cmd(param))
+
+    def postures(self, param):
+        # param = enum[standing, jumper, kicker]
+        self.sender.send(postures_cmd(param))
+
+    def jump(self, param):
+        # param = enum[long, high]
+        self.sender.send(jump_cmd(param))
+    def turn(self, param):
+        # param = angle
+        self.sender.send(turn_cmd(param))
+    def volume(self, param):
+        # param = angle
+        self.sender.send(volume_cmd(param))
+    def requestAllStates(self):
+        self.sender.send(requestAllStates_cmd())
+    def BatteryLevel(self):
+        return self.receiver.get_battery()
 
     def disconnect(self):
         """

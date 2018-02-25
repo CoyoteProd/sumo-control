@@ -21,14 +21,19 @@ def main():
     ctrl = SumoController()
     ctrl.connect()
     print('starting...')
+    ctrl.volume(0)
+    ctrl.requestAllStates()
     # Collect events until released
     with keyboard.Listener( on_press=on_press, on_release=on_release) as listener:
-        try:
-            threading.Timer(0.01,task).start()
-            listener.join()
-        except:
-            print('error')
-
+        threading.Timer(0.01,task).start()
+        threading.Timer(10,displayBatteryLevel).start()
+        listener.join()
+        
+            
+def displayBatteryLevel():
+    global ctrl
+    print ('{}%'.format(ctrl.BatteryLevel()))
+    threading.Timer(10,displayBatteryLevel).start()
 
 def task():
     global ctrl
@@ -83,8 +88,18 @@ def task():
 	
 def on_press(key):
     global up,down,left, right
+    global ctrl
     try:
         print('alphanumeric key {0} pressed'.format(key.char))
+        # param = enum[stop, spin, tap, slowshake, metronome, oudulation, spinjump, spintoposture, spiral,slalom]
+        if key.char=='1': 
+            ctrl.animation(2) #tap
+        elif key.char=='2': 
+            ctrl.animation(5) #metronome        
+        elif key.char=='3': 
+            ctrl.animation(3) #metronome
+        elif key.char=='6': 
+            ctrl.turn(3) # +180
     except AttributeError:        
         if key==keyboard.Key.up:
             up=True;
@@ -94,11 +109,9 @@ def on_press(key):
             left=True;
         elif key==keyboard.Key.right:
             right=True;
-        #print('special key {0} pressed'.format(key))
-        #print('up:{0} down:{1} left:{2} right:{3}'.format(up, down, left, right))
 			
 def on_release(key):
-    global up,down,left, right
+    global up,down,left, right    
     if key == keyboard.Key.esc:        
         return False
     if key==keyboard.Key.up:
@@ -109,8 +122,6 @@ def on_release(key):
         left=False;
     elif key==keyboard.Key.right:
         right=False;
-    #print('{0} released'.format(key))
-    #print('up:{0} down:{1} left:{2} right:{3}'.format(up, down, left, right))
 
 
 if __name__ == '__main__':

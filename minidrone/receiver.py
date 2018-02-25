@@ -35,12 +35,19 @@ class SumoReceiver(Thread):
         self.should_run.set()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.settimeout(1.0)
+        self.battery = 0
 
         # Video frames
         self.current_frame_no = None
         self.parts = None
         self.frames = []
         self.mutex_frames = Lock()
+    
+    def get_battery(self):
+        return self._battery
+
+    def set_battery(self, x):
+        self._battery = x
 
     def run(self):
         logging.info('SumoReceiver started.')
@@ -82,6 +89,10 @@ class SumoReceiver(Thread):
                     # time = struct.unpack('s', payload[4:])
                     time = payload[4:-1].decode()
                     logging.info('Time updated to: {}'.format(time))
+                elif (cmd_class, cmd_id) == (5, 1):
+                    battery = struct.unpack('<B',payload[4:5])[0]
+                    #logging.info('Battery level: {}'.format(battery))
+                    set_battery(battery)
                 else:
                     logging.debug('DataFrame | Project: {}, Class: {}, Id: {}'.format(cmd_project, cmd_class, cmd_id))
             elif cmd_project == PROJECT_SUMO:

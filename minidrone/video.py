@@ -19,7 +19,7 @@ class SumoDisplay(Thread):
         self.should_run.set()
 
         self.window_name = 'Sumo Display'
-        # cv2.namedWindow('SumoDisplay')
+        #cv2.namedWindow('SumoDisplay')
 
     def run(self):
         while self.should_run.isSet():
@@ -30,7 +30,7 @@ class SumoDisplay(Thread):
                 img = np.array(Image.open(byte_frame))
                 cv2.imshow(self.window_name, img)
 
-            cv2.waitKey(25)
+            cv2.waitKey(25)    
 
     def disconnect(self):
         """
