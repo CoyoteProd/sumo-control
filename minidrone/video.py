@@ -18,8 +18,8 @@ class SumoDisplay(Thread):
         self.should_run = Event()
         self.should_run.set()
 
-        self.window_name = 'Sumo Display'
-        #cv2.namedWindow('SumoDisplay')
+        self.window_name = 'SumoDisplay'
+        #cv2.namedWindow('SumoDisplay', cv2.WINDOW_NORMAL)
 
     def run(self):
         while self.should_run.isSet():

@@ -77,7 +77,6 @@ class SumoSender(Thread):
             with self.send_lock:
                 logging.debug('PCMD: {}'.format(self.cmd))
                 self.socket.sendto(self.cmd, (self.host, self.port))
-                self.cmd = _pack_frame(move_cmd(0, 0))
 
             time.sleep(0.025)
 
